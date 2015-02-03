@@ -6,68 +6,11 @@
 # Email: alejandro (dot) bernardis (at) asumikamikaze (dot) com
 # Created: 02/Feb/2015 14:01
 
-"""
-Tornado Mixpanel
-----------------
-
-Tornado Mixpanel is an async library for Mixpanel service. This library allows
-for server-side integration of Mixpanel.
-
-Example
-```````
-
-.. code-block:: python
-
-    from tornado import gen, ioloop
-    from tornado_mixpanel.client import AsyncMixpanelClient
-
-
-    @gen.coroutine
-    def run():
-        client = AsyncMixpanelClient('<mixpanel-token>')
-        raw_input('Press (enter) to continue...')
-
-        try:
-            r = yield client.track(
-                'user-xxxx', 'steps', {'step_one': True, 'step_two': False})
-            print r.body
-
-            r = yield client.people_set(
-                'client-xxxx', {'fullname': 'Alejandro Bernardis'})
-            print r.body
-
-            r = yield client.people_append(
-                'client-xxxx', {'age': 31, 'locale': 'es_AR'})
-            print r.body
-        except Exception, e:
-            print e
-
-        ioloop.IOLoop.current().stop()
-
-
-    if __name__ == '__main__':
-        run()
-        ioloop.IOLoop.instance().start()
-
-
-Easy to Setup
-`````````````
-
-.. code-block:: bash
-
-    $ pip install tornado-mixpanel
-
-
-Links
-`````
-
-* `website <https://github.com/alejandrobernardis/tornado-mixpanel>`_
-
-"""
-
 from tornado_mixpanel import version
 from setuptools import setup, find_packages
 
+with open('README.rst', 'r') as f:
+    readme = f.read()
 
 setup(
     name='tornado-mixpanel',
@@ -77,7 +20,7 @@ setup(
     author='Alejandro M. Bernardis',
     author_email='alejandro.m.bernardis@gmail.com',
     description='An async client for mixpanel.',
-    long_description=__doc__,
+    long_description=readme,
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
