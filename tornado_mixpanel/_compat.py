@@ -8,7 +8,6 @@
 
 # TODO(berna): Support for Python 3.0+
 
-from __future__ import absolute_import, division, print_function, with_statement
 import datetime
 
 try:
