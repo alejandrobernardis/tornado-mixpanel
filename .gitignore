@@ -1,3 +1,5 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Python template
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -52,3 +54,19 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Custom
+.DS_*
+.idea/
+.idea-old/
+.idea
+.idea-old
+*.out
+*.ignore
+**/ignore/
+2.7/
+2.7
+fileobject/
+fileobjects/
+**/node_modules/
+**/vendor/
