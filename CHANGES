@@ -1,13 +1,11 @@
-tornado-mixpanel
+Tornado Mixpanel
 ================
 
-Here you can see the full list of changes between each tornado-mixpanel release.
+Here you can see the full list of changes between each Tornado Mixpanel release.
 
 Version 0.1
 -----------
 
-Released on ~month~ ~day~ ~year~, codename ~optional~
+Released on Feb 2015, codename "kirika"
 
-- Item 1 line 1
-  Item 1 line 2.
-- Items...
+- First approach.

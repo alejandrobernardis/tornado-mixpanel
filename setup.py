@@ -14,6 +14,42 @@ Tornado Mixpanel is an async library for Mixpanel service. This library allows
 for server-side integration of Mixpanel.
 
 
+Example
+```````
+
+.. code:: python
+    from tornado import gen, ioloop
+    from tornado_mixpanel.client import AsyncMixpanelClient
+
+
+    @gen.coroutine
+    def run():
+        client = AsyncMixpanelClient('<mixpanel-token>')
+        raw_input('Press (enter) to continue...')
+
+        try:
+            r = yield client.track(
+                'user-xxxx', 'steps', {'step_one': True, 'step_two': False})
+            print r.body
+
+            r = yield client.people_set(
+                'client-xxxx', {'fullname': 'Alejandro Bernardis'})
+            print r.body
+
+            r = yield client.people_append(
+                'client-xxxx', {'age': 31, 'locale': 'es_AR'})
+            print r.body
+        except Exception, e:
+            print e
+
+        ioloop.IOLoop.current().stop()
+
+
+    if __name__ == '__main__':
+        run()
+        ioloop.IOLoop.instance().start()
+
+
 Easy to Setup
 `````````````
 
@@ -29,7 +65,7 @@ Links
 """
 
 from tornado_mixpanel import version
-from setuptools import setup, find_packages, findall
+from setuptools import setup, find_packages
 
 
 setup(
@@ -57,11 +93,10 @@ setup(
     ],
     packages=find_packages(exclude=['docs', 'examples', 'scripts', 'templates',
                                     'tests']),
-    package_data={'': ['CHANGES', 'LICENSE', 'README', 'AUTHORS']},
+    package_data={'': ['CHANGES', 'LICENSE', 'AUTHORS', 'README.rst']},
     package_dir={'tornado_mixpanel': 'tornado_mixpanel'},
     include_package_data=True,
     zip_safe=False,
     platforms=['Linux'],
-    install_requires=[line.strip() for line in open('requirements.txt', 'r')],
-    scripts=findall('scripts')
+    install_requires=[line.strip() for line in open('requirements.txt', 'r')]
 )
