@@ -13,11 +13,11 @@ Tornado Mixpanel
 Tornado Mixpanel is an async library for Mixpanel service. This library allows
 for server-side integration of Mixpanel.
 
-
 Example
 ```````
 
-.. code:: python
+.. code-block:: python
+
     from tornado import gen, ioloop
     from tornado_mixpanel.client import AsyncMixpanelClient
 
@@ -53,7 +53,8 @@ Example
 Easy to Setup
 `````````````
 
-.. code:: bash
+.. code-block:: bash
+
     $ pip install tornado-mixpanel
 
 
@@ -85,14 +86,13 @@ setup(
         'Natural Language :: Spanish',
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Rust',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Software Development :: Libraries :: Application Frameworks',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities'
     ],
     packages=find_packages(exclude=['docs', 'examples', 'scripts', 'templates',
-                                    'tests']),
+                                    'tests', 'libs']),
     package_data={'': ['CHANGES', 'LICENSE', 'AUTHORS', 'README.rst']},
     package_dir={'tornado_mixpanel': 'tornado_mixpanel'},
     include_package_data=True,
