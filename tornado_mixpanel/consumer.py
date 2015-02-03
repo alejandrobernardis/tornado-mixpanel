@@ -72,7 +72,7 @@ class MixpanelConsumer(object):
         return urlencode(values, True).encode('utf-8')
 
     def _sanitize_headers(self, headers=None):
-        raise NotImplementedError()
+        return headers
 
     def _sanitize_response(self, response=None, error=None):
         if isinstance(error, HTTPError):

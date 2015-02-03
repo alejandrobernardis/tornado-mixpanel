@@ -6,13 +6,10 @@
 # Email: alejandro (dot) bernardis (at) asumikamikaze (dot) com
 # Created: 03/Feb/2015 12:48
 
-from __future__ import absolute_import, division, print_function, with_statement
-
-
 # Version
 
-version = '0.1-dev'
-version_tuple = (0, 1, 0, -1)
+version = '0.1'
+version_tuple = (0, 1, 0, 0)
 
 
 # Mixpanel Settings

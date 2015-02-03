@@ -22,7 +22,7 @@ setup(
     description='An async client for mixpanel.',
     long_description=readme,
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
         'Intended Audience :: Developers',
         'Natural Language :: English',

@@ -7,6 +7,7 @@
 # Created: 03/Feb/2015 13:57
 
 import time
+import traceback
 from tornado import gen, ioloop
 from tornado_mixpanel.client import AsyncMixpanelClient
 
@@ -18,20 +19,18 @@ def run():
 
     try:
         username = int(time.time())
+        print 'Tracking...'
 
         for i in xrange(10):
-            print i,
             yield client.track(username, 'item_%s' % i, {'i': i})
             time.sleep(1)
-
-        print '\n' * 2
-        print '-*-' * 80
+        print '-*-' * 20
 
         r = yield client.consumer.flush()
         print r
 
-    except Exception, e:
-        print e
+    except:
+        print traceback.format_exc()
 
     ioloop.IOLoop.current().stop()
 

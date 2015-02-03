@@ -42,33 +42,76 @@ Here is a simple example:
     #!/usr/bin/env python2.7
     # -*- coding: utf-8 -*-
     
+    import traceback
     from tornado import gen, ioloop
     from tornado_mixpanel.client import AsyncMixpanelClient
-    
-    
+
+
     @gen.coroutine
     def run():
         client = AsyncMixpanelClient('<mixpanel-token>')
         raw_input('Press (enter) to continue...')
-    
+
         try:
             r = yield client.track(
                 'user-xxxx', 'steps', {'step_one': True, 'step_two': False})
-            print r.body
-    
+            print r
+
             r = yield client.people_set(
                 'client-xxxx', {'fullname': 'Alejandro Bernardis'})
-            print r.body
-    
+            print r
+
             r = yield client.people_append(
                 'client-xxxx', {'age': 31, 'locale': 'es_AR'})
-            print r.body
-        except Exception, e:
-            print e
-    
+            print r
+
+        except:
+            print traceback.format_exc()
+
         ioloop.IOLoop.current().stop()
-    
-    
+
+
+    if __name__ == '__main__':
+        run()
+        ioloop.IOLoop.instance().start()
+
+
+And buffer example:
+
+.. code-block:: python
+
+    #!/usr/bin/env python2.7
+    # -*- coding: utf-8 -*-
+
+    import time
+    import traceback
+    from tornado import gen, ioloop
+    from tornado_mixpanel.client import AsyncMixpanelClient
+
+
+    @gen.coroutine
+    def run():
+        client = AsyncMixpanelClient('<mixpanel-token>', True)
+        raw_input('Press (enter) to continue...')
+
+        try:
+            username = int(time.time())
+            print 'Tracking...'
+
+            for i in xrange(10):
+                yield client.track(username, 'item_%s' % i, {'i': i})
+                time.sleep(1)
+            print '-*-' * 20
+
+            r = yield client.consumer.flush()
+            print r
+
+        except:
+            print traceback.format_exc()
+
+        ioloop.IOLoop.current().stop()
+
+
     if __name__ == '__main__':
         run()
         ioloop.IOLoop.instance().start()
