@@ -1,3 +1,4 @@
+
 Tornado Mixpanel
 ================
 
@@ -10,7 +11,9 @@ Installation
 
 **Automatic installation**:
 
-    pip install tornado-mixpanel
+.. code-block:: bash
+
+    $ pip install tornado-mixpanel
 
 Tornado Mixpanel is listed in `PyPI <http://pypi.python.org/pypi/
 tornado-mixpanel/>`_ and can be installed with ``pip`` or ``easy_install``.
