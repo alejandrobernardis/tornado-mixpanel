@@ -40,7 +40,7 @@ def dict_or_error(func):
 
 @string_or_error
 def want_bytes(value, encoding='utf-8', errors='strict'):
-    if isinstance(value, unicode):
+    if isinstance(value, _compat.unicode_types):
         value = value.encode(encoding, errors)
     return value
 
@@ -66,7 +66,7 @@ def dispatch(response, callback=None, raising=True):
 
 @value_or_none
 def complex_types(value):
-    if isinstance(value, unicode):
+    if isinstance(value, _compat.unicode_types):
         return want_bytes(value)
     elif isinstance(value, _compat.primitive_types):
         return value
