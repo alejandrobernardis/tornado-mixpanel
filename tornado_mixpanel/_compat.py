@@ -14,12 +14,14 @@ try:
     import ujson as json
 except ImportError:
     try:
-        import ujson as json
+        import simplejson as json
     except ImportError:
         import json
 
 
+bytes_types = str
 string_types = basestring
+unicode_types = unicode
 list_types = (tuple, list)
 
 primitive_types = \
