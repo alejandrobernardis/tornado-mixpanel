@@ -54,9 +54,7 @@ def setdefault(source, key, default):
 
 # Async
 
-def dispatch(response, callback=None, raising=True):
-    if raising and isinstance(response, Exception):
-        raise response
+def dispatch(response, callback=None):
     if callback is None:
         raise gen.Return(response)
     callback(response)
@@ -72,4 +70,4 @@ def complex_types(value):
         return value
     elif isinstance(value, _compat.datetime_types):
         return value.isoformat()
-    return str(value)
+    return _compat.bytes_types(value)

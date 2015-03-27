@@ -29,9 +29,9 @@ def is_endpoint(method):
     def wrapper(self, *args, **kwargs):
         endpoint = kwargs.get('endpoint', args[0])
         if endpoint not in MIXPANEL_ENDPOINTS_KEYS:
-            raise ConsumerError(
+            raise gen.Return(ConsumerError(
                 'No such endpoints "%s". Valid endpoints are one of %s.'
-                % (endpoint, MIXPANEL_ENDPOINTS_KEYS))
+                % (endpoint, MIXPANEL_ENDPOINTS_KEYS)))
         return method(self, *args, **kwargs)
     return wrapper
 
@@ -40,7 +40,8 @@ def is_buffered(method):
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         if not getattr(self, '_buffered', False):
-            raise ConsumerError('Async buffered consumer not supported')
+            raise gen.Return(ConsumerError(
+                'Async buffered consumer not supported'))
         return method(self, *args, **kwargs)
     return wrapper
 
@@ -78,37 +79,42 @@ class MixpanelConsumer(object):
         if isinstance(error, HTTPError):
             response = error.response
         if not isinstance(response, HTTPResponse):
-            message = 'Response must be a "tornado.httpclient.HTTPResponse".'
-            raise ConsumerError(message)
+            raise ConsumerError('Response must be a '
+                                '"tornado.httpclient.HTTPResponse".')
         body = _compat.json.loads(response.body)
         if response.code != 200 or response.error or body.get('status', 0) != 1:
             raise ConsumerError(body, response)
         return body
 
-    @is_endpoint
     @gen.coroutine
+    @is_endpoint
     def fetch(self, endpoint, message, headers=None, **kwargs):
-        request = HTTPRequest(self._endpoints[endpoint], 'POST')
-        request.headers = self._sanitize_headers(headers)
-        request.body = self._sanitize_body(message)
-        for key, value in kwargs.items():
-            setattr(request, key, value)
         try:
-            response = yield AsyncHTTPClient().fetch(request)
-            response = self._sanitize_response(response)
-        except HTTPError, e:
-            response = self._sanitize_response(error=e)
+            request = HTTPRequest(self._endpoints[endpoint], 'POST')
+            request.headers = self._sanitize_headers(headers)
+            request.body = self._sanitize_body(message)
+            for key, value in kwargs.items():
+                setattr(request, key, value)
+            try:
+                response = yield AsyncHTTPClient().fetch(request)
+                response = self._sanitize_response(response)
+            except HTTPError, e:
+                response = self._sanitize_response(error=e)
+            except Exception, e:
+                response = e
+        except Exception, e:
+            response = ConsumerError(e.message)
         raise gen.Return(response)
 
-    @is_endpoint
     @gen.coroutine
+    @is_endpoint
     def send(self, endpoint, message, callback=None, **kwargs):
         try:
             response = yield self.fetch(endpoint, message, **kwargs)
-        except Exception, e:
-            response = ConsumerError(None, e)
         except ConsumerError, e:
             response = e
+        except Exception, e:
+            response = ConsumerError(None, e)
         dispatch(response, callback)
 
 
@@ -155,6 +161,7 @@ class MixpanelBufferedConsumer(MixpanelConsumer):
             buffering.extend(current)
             current.clear()
             try:
+                # TODO(berna): collect and analyze results
                 message = '[{0}]'.format(','.join(buffering))
                 yield self.fetch(endpoint, message, **kwargs)
             except Exception, e:
@@ -170,8 +177,8 @@ class MixpanelBufferedConsumer(MixpanelConsumer):
         response = yield self._prepare_flush(**kwargs)
         dispatch(response, callback)
 
-    @is_endpoint
     @gen.coroutine
+    @is_endpoint
     def send(self, endpoint, message, callback=None, **kwargs):
         response = False
         current = self._current[endpoint]

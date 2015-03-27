@@ -22,7 +22,8 @@ def run():
         print 'Tracking...'
 
         for i in xrange(10):
-            yield client.track(username, 'item_%s' % i, {'i': i})
+            r = yield client.track(username, 'item_%s' % i, {'i': i})
+            print i, r == False
             time.sleep(1)
         print '-*-' * 20
 

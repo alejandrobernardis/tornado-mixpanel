@@ -11,10 +11,12 @@
 import datetime
 
 try:
-    import ujson as json
+    import ujson
+    json = ujson
 except ImportError:
     try:
-        import simplejson as json
+        import simplejson
+        json = simplejson
     except ImportError:
         import json
 
